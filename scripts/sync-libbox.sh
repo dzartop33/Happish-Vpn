@@ -40,6 +40,14 @@ git fetch --tags --force
 git checkout "$TARGET_TAG"
 git reset --hard "$TARGET_TAG"
 
+export PATH="$(go env GOPATH)/bin:$PATH"
+export GO111MODULE=on
+export GOPROXY="https://proxy.golang.org,direct"
+
+echo "==> Installing gomobile"
+go install github.com/sagernet/gomobile/cmd/gomobile@latest
+gomobile init
+
 # The command is used by sing-box's Android build flow. Exact flags may differ by tag.
 echo "==> Building libbox for Android"
 go run ./cmd/internal/build_libbox -target android
