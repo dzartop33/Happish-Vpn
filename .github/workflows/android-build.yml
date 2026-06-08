@@ -56,7 +56,7 @@ jobs:
         if: ${{ github.event.inputs.build_libbox != 'false' }}
         uses: actions/setup-go@v5
         with:
-                    go-version: "1.25.x"
+          go-version: "1.25.x"
           cache: false
 
       - name: Set up Android command line tools
@@ -66,17 +66,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           echo "ANDROID_HOME=$ANDROID_HOME"
 
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
-
           if [[ ! -x "$SDKMANAGER" ]]; then
             SDKMANAGER="$(command -v sdkmanager)"
           fi
 
           yes | "$SDKMANAGER" --licenses >/dev/null || true
-
           "$SDKMANAGER" \
             "platform-tools" \
             "platforms;android-${ANDROID_API}" \
@@ -91,12 +88,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           curl -L "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -o /tmp/gradle.zip
           unzip -q /tmp/gradle.zip -d /tmp
-
           echo "/tmp/gradle-${GRADLE_VERSION}/bin" >> "$GITHUB_PATH"
-
           /tmp/gradle-${GRADLE_VERSION}/bin/gradle --version
 
       - name: Build sing-box libbox.aar
@@ -104,7 +98,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           chmod +x scripts/sync-libbox.sh
 
           if [[ -n "${{ github.event.inputs.sing_box_tag }}" ]]; then
@@ -121,7 +114,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           if [[ ! -f app/libs/libbox.aar ]]; then
             echo "build_libbox=false, but app/libs/libbox.aar is missing." >&2
             echo "Run workflow with build_libbox=true." >&2
@@ -132,7 +124,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           gradle --no-daemon --stacktrace assembleDebug
 
       - name: Upload debug APK artifact
